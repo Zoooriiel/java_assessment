@@ -75,24 +75,29 @@ public class CourseService
         }
     }
 
+    public List<Student> getEnrolledStudents(String courseId) {
+        return enrolledStudents.getOrDefault(courseId, new ArrayList<>());
+    }
 
-    public void showSummary()
-    {
-        System.out.println( "Available Courses:" );
-        for ( String key : courses.keySet() )
-        {
-            Course course = courses.get( key );
-            System.out.println( course );
-        }
-        System.out.println( "Enrolled Students" );
-        for ( String key : enrolledStudents.keySet() )
-        {
-            List<Student> students = enrolledStudents.get( key );
-            System.out.println( "Students on Course " + key + ": " );
-            for ( Student student : students )
-            {
-                System.out.println( student );
+
+    public void showSummary() {
+        System.out.println("Available Courses:");
+
+        for (String key : courses.keySet()) {
+            Course course = courses.get(key);
+            System.out.println("Course: " + course.getName() + " (" + course.getCode() + ")");
+
+            if (enrolledStudents.containsKey(key)) {
+                List<Student> students = enrolledStudents.get(key);
+                System.out.println("Enrolled Students:");
+
+                for (Student student : students) {
+                    System.out.println("  Student {ID: " + student.getId() + ", Name: " + student.getName() + "}");
+                }
+            } else {
+                System.out.println("  No students are enrolled in this course.");
             }
         }
     }
+
 }

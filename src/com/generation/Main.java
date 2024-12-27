@@ -8,6 +8,7 @@ import com.generation.utils.PrinterHelper;
 
 import java.text.ParseException;
 import java.util.Scanner;
+import java.util.List;
 
 public class Main
 {
@@ -85,9 +86,59 @@ public class Main
         studentService.showSummary();
     }
 
-    private static void gradeStudent( StudentService studentService, Scanner scanner )
-    {
+    private static void gradeStudent(StudentService studentService, Scanner scanner) {
+        System.out.println("Enter student ID: ");
+        String studentId = scanner.next();
+        Student student = studentService.findStudent(studentId);
 
+        if (student == null) {
+            System.out.println("Student with ID " + studentId + " not found.");
+            return;
+        }
+
+        System.out.println("Enrolled courses for this student:");
+        List<Course> courses = student.getCourses();
+
+        if (courses.isEmpty()) {
+            System.out.println("Student is not enrolled in any courses.");
+            return;
+        }
+
+        for (Course course : courses) {
+            System.out.println("Course ID: " + course.getCode() + " - " + course.getName());
+        }
+
+        System.out.println("Enter course ID to assign a grade: ");
+        String courseCode = scanner.next();
+        Course selectedCourse = null;
+        for (Course course : courses) {
+            if (course.getCode().equals(courseCode)) {
+                selectedCourse = course;
+                break;
+            }
+        }
+
+        if (selectedCourse == null) {
+            System.out.println("Invalid course ID or the student is not enrolled in this course.");
+            return;
+        }
+
+        System.out.println("Enter grade for the course: ");
+        double grade;
+        try {
+            grade = scanner.nextDouble();
+            if (grade < 0 || grade > 100) {
+                System.out.println("Invalid grade. Please enter a value between 0 and 100.");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter a numerical value.");
+            return;
+        }
+
+        student.setGrade(courseCode, grade);
+
+        System.out.println("Grade assigned successfully for course " + courseCode + ": " + grade);
     }
 
     private static void findStudent( StudentService studentService, Scanner scanner )

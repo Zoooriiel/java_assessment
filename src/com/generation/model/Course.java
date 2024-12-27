@@ -1,4 +1,6 @@
 package com.generation.model;
+import com.generation.model.Module;
+
 
 public class Course
 {
